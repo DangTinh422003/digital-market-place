@@ -2,9 +2,19 @@ import Link from "next/link";
 import React from "react";
 import NavbarLinks from "./NavbarLinks";
 import { Button } from "./ui/button";
-import MobileMenu from "./MobileMenu";
+import {
+  RegisterLink,
+  LoginLink,
+  LogoutLink,
+} from "@kinde-oss/kinde-auth-nextjs/components";
 
-const Navbar = () => {
+import MobileMenu from "./MobileMenu";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+
+const Navbar = async () => {
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+
   return (
     <nav className="relative max-w-7xl w-full flex md:grid md:grid-cols-12 items-center px-4 md:px-8 mx-auto py-7">
       <div className="md:col-span-3">
@@ -17,14 +27,24 @@ const Navbar = () => {
 
       <NavbarLinks />
 
-      <div className="flex items-center gap-x-2 ms-auto md:col-span-3">
-        <Button>Login</Button>
-        <Button variant="outline">Register</Button>
+      {!user ? (
+        <div className="flex items-center gap-x-2 ms-auto md:col-span-3">
+          <Button asChild>
+            <LoginLink>Logn</LoginLink>
+          </Button>
+          <Button variant="outline" asChild>
+            <RegisterLink>Register</RegisterLink>
+          </Button>
 
-        <div className="md:hidden">
-          <MobileMenu />
+          <div className="md:hidden">
+            <MobileMenu />
+          </div>
         </div>
-      </div>
+      ) : (
+        <Button variant={"ghost"} asChild>
+          <LogoutLink>Sign ou</LogoutLink>
+        </Button>
+      )}
     </nav>
   );
 };
