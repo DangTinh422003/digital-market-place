@@ -5,11 +5,11 @@ import { Button } from "./ui/button";
 import {
   RegisterLink,
   LoginLink,
-  LogoutLink,
 } from "@kinde-oss/kinde-auth-nextjs/components";
 
 import MobileMenu from "./MobileMenu";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import UserNavMenu from "./UserNavMenu";
 
 const Navbar = async () => {
   const { getUser } = getKindeServerSession();
@@ -41,9 +41,9 @@ const Navbar = async () => {
           </div>
         </div>
       ) : (
-        <Button variant={"ghost"} asChild>
-          <LogoutLink>Sign ou</LogoutLink>
-        </Button>
+        <div className="flex justify-end md:col-span-3">
+          <UserNavMenu />
+        </div>
       )}
     </nav>
   );
