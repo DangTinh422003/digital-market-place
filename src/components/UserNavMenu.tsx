@@ -10,17 +10,22 @@ import {
 import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs";
 import React from "react";
 import { Button } from "./ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Avatar, AvatarImage } from "./ui/avatar";
 
-const UserNavMenu = () => {
+interface UserProfile {
+  name: string;
+  email: string;
+  avatar: string | null;
+}
+
+const UserNavMenu = ({ avatar, email, name }: UserProfile) => {
   return (
     <div className="font-normal">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="w-10 h-10 rounded-full relative">
             <Avatar className="w-10 h-10">
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>Dan</AvatarFallback>
+              <AvatarImage src={avatar || "https://avatar.vercel.sh/rauchg"} />
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
@@ -28,11 +33,9 @@ const UserNavMenu = () => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>
             <div className="flex flex-col space-y-1">
-              <p className="text-sm font-semibold leading-none">
-                Cao Dang Tinh
-              </p>
+              <p className="text-sm font-semibold leading-none">{name}</p>
               <p className="text-xs leading-none text-muted-foreground">
-                caodangtinh04022003@gmail.com
+                {email}
               </p>
             </div>
           </DropdownMenuLabel>

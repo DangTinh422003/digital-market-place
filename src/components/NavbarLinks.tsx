@@ -1,8 +1,9 @@
 "use client";
 import { cn } from "@/lib/utils";
+import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
+import React, { HTMLAttributes } from "react";
 
 export const NAVBAR_LINKS = [
   {
@@ -27,11 +28,16 @@ export const NAVBAR_LINKS = [
   },
 ];
 
-const NavbarLinks = () => {
+interface NavbarLinksProps extends HTMLAttributes<HTMLDivElement> {}
+
+const NavbarLinks = ({ className, ...rest }: NavbarLinksProps) => {
   const location = usePathname();
 
   return (
-    <div className="hidden md:flex justify-center items-center col-span-6">
+    <div
+      className={clsx("hidden md:flex justify-center items-center", className)}
+      {...rest}
+    >
       {NAVBAR_LINKS.map((link) => (
         <Link
           key={link.id}

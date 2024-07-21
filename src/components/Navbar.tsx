@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React from "react";
+import React, { use } from "react";
 import NavbarLinks from "./NavbarLinks";
 import { Button } from "./ui/button";
 import {
@@ -25,7 +25,7 @@ const Navbar = async () => {
         </Link>
       </div>
 
-      <NavbarLinks />
+      <NavbarLinks className="col-span-6" />
 
       {!user ? (
         <div className="flex items-center gap-x-2 ms-auto md:col-span-3">
@@ -35,14 +35,17 @@ const Navbar = async () => {
           <Button variant="outline" asChild>
             <RegisterLink>Register</RegisterLink>
           </Button>
-
+        </div>
+      ) : (
+        <div className="col-span-3 hidden md:flex justify-end">
+          <UserNavMenu
+            name={user.username || `${user.family_name} ${user.given_name}`}
+            email={user.email as string}
+            avatar={user.picture}
+          />
           <div className="md:hidden">
             <MobileMenu />
           </div>
-        </div>
-      ) : (
-        <div className="flex justify-end md:col-span-3">
-          <UserNavMenu />
         </div>
       )}
     </nav>
