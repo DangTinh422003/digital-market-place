@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "@/styles/globals.css";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import Navbar from "@/components/Navbar";
-import { ourFileRouter } from "./api/auth/uploadthing/core";
+import { ourFileRouter } from "./api/uploadthing/core";
 import { extractRouterConfig } from "uploadthing/server";
+
+import "@/styles/globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 

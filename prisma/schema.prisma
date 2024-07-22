@@ -39,8 +39,7 @@ model Product {
   images String[]
   productFile String
   category CategoryTypes
-
+  
   createdAt DateTime @default(now())
-
   User User[]
 }
