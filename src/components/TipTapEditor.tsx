@@ -3,10 +3,13 @@ import React, { HTMLAttributes } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Button } from "./ui/button";
+import { SELL_PRODUCT_FORM_FIELDS } from "@/constants";
 
 interface TipTapEditorProps extends HTMLAttributes<HTMLDivElement> {}
 
 const TipTapEditor = (props: TipTapEditorProps) => {
+  const [description, setDescription] = React.useState("");
+
   const editor = useEditor({
     extensions: [StarterKit],
     editorProps: {
@@ -14,11 +17,20 @@ const TipTapEditor = (props: TipTapEditorProps) => {
         class: "focus:outline-none min-h-[150px] prose prose-sm sm:prose-base",
       },
     },
+    onUpdate({ editor }) {
+      setDescription(JSON.stringify(editor.getJSON()));
+    },
+    immediatelyRender: false,
   });
 
   return (
     <div {...props}>
       <div className="flex gap-4 flex-wrap">
+        <input
+          name={SELL_PRODUCT_FORM_FIELDS.DESCRIPTION}
+          type="hidden"
+          value={description}
+        />
         <Button
           type="button"
           variant={

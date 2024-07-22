@@ -27,7 +27,7 @@ export const ourFileRouter = {
     },
   })
     .middleware(async ({ req }) => {
-      const { getUser } = await getKindeServerSession();
+      const { getUser } = getKindeServerSession();
       const user = await getUser();
       if (!user) throw new UploadThingError("Unauthorized");
       return { userId: user.id };

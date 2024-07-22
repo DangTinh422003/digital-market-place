@@ -12,7 +12,7 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import UserNavMenu from "./UserNavMenu";
 
 const Navbar = async () => {
-  const { getUser } = getKindeServerSession();
+  const { getUser } = await getKindeServerSession();
   const user = await getUser();
 
   return (

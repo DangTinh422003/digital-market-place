@@ -6,6 +6,7 @@ import { ourFileRouter } from "./api/uploadthing/core";
 import { extractRouterConfig } from "uploadthing/server";
 
 import "@/styles/globals.css";
+import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,6 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <Toaster richColors closeButton />
         <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
         <Navbar />
         {children}
