@@ -39,7 +39,7 @@ export async function sellProduct(prevState: any, form: FormData) {
   const validateFields = productSchema.safeParse({
     name: form.get(SELL_PRODUCT_FORM_FIELDS.NAME),
     category: form.get(SELL_PRODUCT_FORM_FIELDS.CATEGORY),
-    price: form.get(SELL_PRODUCT_FORM_FIELDS.PRICE),
+    price: Number(form.get(SELL_PRODUCT_FORM_FIELDS.PRICE)),
     smallDescription: form.get(SELL_PRODUCT_FORM_FIELDS.SMALL_DESCRIPTION),
     description: form.get(SELL_PRODUCT_FORM_FIELDS.DESCRIPTION),
   });

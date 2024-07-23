@@ -16,9 +16,10 @@ import TipTapEditor from "./TipTapEditor";
 import { UploadDropzone } from "@/utils/uploadthing";
 import { Button } from "./ui/button";
 import { sellProduct } from "@/app/action";
-import { useFormState } from "react-dom";
+import { useFormState, useFormStatus } from "react-dom";
 import { SELL_PRODUCT_FORM_FIELDS, State } from "@/constants";
 import { toast } from "sonner";
+import { LoaderCircle } from "lucide-react";
 
 const SellRoute = () => {
   const [images, setImages] = React.useState<string[]>([]);
@@ -31,7 +32,9 @@ const SellRoute = () => {
       message: "",
     };
   }, []);
+
   const [state, formAction] = useFormState(sellProduct, initFormState);
+  const { pending } = useFormStatus();
 
   useEffect(() => {
     if (state.status === "success") {
@@ -131,9 +134,10 @@ const SellRoute = () => {
                 endpoint="imageUploader"
                 onClientUploadComplete={(data) => {
                   setImages(data.map((d) => d.url));
+                  toast.success("Image uploaded successfully");
                 }}
                 onUploadError={() => {
-                  throw new Error("Failed to upload image");
+                  toast.error("Failed to upload image");
                 }}
               />
               {state?.error?.[SELL_PRODUCT_FORM_FIELDS.IMAGES]?.[0] && (
@@ -147,16 +151,19 @@ const SellRoute = () => {
               <input
                 type="hidden"
                 name={SELL_PRODUCT_FORM_FIELDS.PRODUCT_FILES}
-                value={productFile}
+                value={productFile || ""}
               />
               <Label>Product Files</Label>
               <UploadDropzone
                 endpoint="productFilesUpload"
                 onClientUploadComplete={(data) => {
-                  setProductFile(data?.[0].url);
+                  console.log(data);
+                  setProductFile(data[0].url);
+                  toast.success("File uploaded successfully");
                 }}
-                onUploadError={() => {
-                  throw new Error("Failed to upload file");
+                onUploadError={(err) => {
+                  console.log(err);
+                  toast.error("Failed to upload file");
                 }}
               />
               {state?.error?.[SELL_PRODUCT_FORM_FIELDS.PRODUCT_FILES]?.[0] && (
@@ -168,7 +175,15 @@ const SellRoute = () => {
           </CardContent>
 
           <CardFooter className="mt-3">
-            <Button type="submit">Submit Form</Button>
+            <Button type="submit" disabled={pending}>
+              {pending ? (
+                <>
+                  <LoaderCircle className="animate-spin" /> Please wait...
+                </>
+              ) : (
+                "Sell Product"
+              )}
+            </Button>
           </CardFooter>
         </form>
       </Card>
