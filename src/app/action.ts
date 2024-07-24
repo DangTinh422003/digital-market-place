@@ -36,6 +36,7 @@ export async function sellProduct(prevState: any, form: FormData) {
   if (!user || !user.id) {
     throw new Error("Unauthorized");
   }
+
   const validateFields = productSchema.safeParse({
     name: form.get(SELL_PRODUCT_FORM_FIELDS.NAME),
     category: form.get(SELL_PRODUCT_FORM_FIELDS.CATEGORY),
@@ -43,6 +44,7 @@ export async function sellProduct(prevState: any, form: FormData) {
     smallDescription: form.get(SELL_PRODUCT_FORM_FIELDS.SMALL_DESCRIPTION),
     description: form.get(SELL_PRODUCT_FORM_FIELDS.DESCRIPTION),
   });
+
   if (!validateFields.success) {
     return {
       status: "error",

@@ -136,7 +136,7 @@ const SellRoute = () => {
                   setImages(data.map((d) => d.url));
                   toast.success("Image uploaded successfully");
                 }}
-                onUploadError={() => {
+                onUploadError={(err) => {
                   toast.error("Failed to upload image");
                 }}
               />
@@ -151,19 +151,17 @@ const SellRoute = () => {
               <input
                 type="hidden"
                 name={SELL_PRODUCT_FORM_FIELDS.PRODUCT_FILES}
-                value={productFile || ""}
+                value={productFile}
               />
               <Label>Product Files</Label>
               <UploadDropzone
-                endpoint="productFilesUpload"
-                onClientUploadComplete={(data) => {
-                  console.log(data);
-                  setProductFile(data[0].url);
-                  toast.success("File uploaded successfully");
+                endpoint="productFileUpload"
+                onClientUploadComplete={(res) => {
+                  setProductFile(res[0].url);
+                  toast.success("Your Product file has been uplaoded!");
                 }}
-                onUploadError={(err) => {
-                  console.log(err);
-                  toast.error("Failed to upload file");
+                onUploadError={(error: Error) => {
+                  toast.error("Something went wrong, try again");
                 }}
               />
               {state?.error?.[SELL_PRODUCT_FORM_FIELDS.PRODUCT_FILES]?.[0] && (
