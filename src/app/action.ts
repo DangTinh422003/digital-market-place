@@ -1,6 +1,8 @@
 "use server";
 import { SELL_PRODUCT_FORM_FIELDS, State } from "@/constants";
+import prisma from "@/utils/db";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { CategoryTypes } from "@prisma/client";
 import { z } from "zod";
 
 const productSchema = z.object({
@@ -19,14 +21,11 @@ const productSchema = z.object({
   description: z.string().min(1, {
     message: "Please describe your product",
   }),
-  files: z.array(z.string(), {
-    message: "Please upload some files",
-  }),
   images: z.array(z.string(), {
     message: "Please upload some images",
   }),
-  productFiles: z.array(z.string(), {
-    message: "Please upload product zip files",
+  productFiles: z.string({
+    message: "Please upload product images",
   }),
 });
 
@@ -34,7 +33,10 @@ export async function sellProduct(prevState: any, form: FormData) {
   const { getUser } = await getKindeServerSession();
   const user = await getUser();
   if (!user || !user.id) {
-    throw new Error("Unauthorized");
+    return {
+      status: "error",
+      message: "Please login to create a product",
+    } as State;
   }
 
   const validateFields = productSchema.safeParse({
@@ -43,13 +45,44 @@ export async function sellProduct(prevState: any, form: FormData) {
     price: Number(form.get(SELL_PRODUCT_FORM_FIELDS.PRICE)),
     smallDescription: form.get(SELL_PRODUCT_FORM_FIELDS.SMALL_DESCRIPTION),
     description: form.get(SELL_PRODUCT_FORM_FIELDS.DESCRIPTION),
+    images: JSON.parse(
+      form.getAll(SELL_PRODUCT_FORM_FIELDS.IMAGES) as unknown as string
+    ) as string[],
+    productFiles: form.get(SELL_PRODUCT_FORM_FIELDS.PRODUCT_FILES),
   });
 
+  console.log({ dlkasldas: form.getAll(SELL_PRODUCT_FORM_FIELDS.IMAGES) });
   if (!validateFields.success) {
     return {
       status: "error",
       error: validateFields.error.flatten().fieldErrors,
       message: "Oops! Something went wrong",
+    } as State;
+  }
+
+  try {
+    await prisma.product.create({
+      data: {
+        name: validateFields.data.name,
+        category: validateFields.data.category as CategoryTypes,
+        price: Number(form.get(SELL_PRODUCT_FORM_FIELDS.PRICE)),
+        description: JSON.parse(
+          (form.get(SELL_PRODUCT_FORM_FIELDS.DESCRIPTION) as string) || ""
+        ),
+        smallDescription:
+          (form.get(SELL_PRODUCT_FORM_FIELDS.SMALL_DESCRIPTION) as string) ||
+          "",
+        images: JSON.parse(
+          form.getAll(SELL_PRODUCT_FORM_FIELDS.IMAGES) as unknown as string
+        ) as string[],
+        productFile: form.get(SELL_PRODUCT_FORM_FIELDS.PRODUCT_FILES) as string,
+      },
+    });
+  } catch (error) {
+    return {
+      status: "error",
+      message: "Oops! Something went wrong",
+      error,
     } as State;
   }
 

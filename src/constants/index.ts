@@ -12,7 +12,6 @@ export enum SELL_PRODUCT_FORM_FIELDS {
   PRICE = "price",
   SMALL_DESCRIPTION = "smallDescription",
   DESCRIPTION = "description",
-  FILES = "files",
   IMAGES = "images",
   PRODUCT_FILES = "productFiles",
 }

@@ -23,7 +23,7 @@ import { LoaderCircle } from "lucide-react";
 
 const SellRoute = () => {
   const [images, setImages] = React.useState<string[]>([]);
-  const [productFile, setProductFile] = React.useState<string>();
+  const [productFile, setProductFile] = React.useState<string>("");
 
   const initFormState = useMemo<State>(() => {
     return {
@@ -127,7 +127,7 @@ const SellRoute = () => {
               <input
                 type="hidden"
                 name={SELL_PRODUCT_FORM_FIELDS.IMAGES}
-                value={images}
+                value={JSON.stringify(images)}
               />
               <Label>Product Images</Label>
               <UploadDropzone
