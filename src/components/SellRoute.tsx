@@ -8,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import { Label } from "@radix-ui/react-dropdown-menu";
 import { Input } from "./ui/input";
 import SelectCategory from "./SelectCategory";
 import { Textarea } from "./ui/textarea";
@@ -20,6 +19,7 @@ import { useFormState, useFormStatus } from "react-dom";
 import { SELL_PRODUCT_FORM_FIELDS, State } from "@/constants";
 import { toast } from "sonner";
 import { LoaderCircle } from "lucide-react";
+import { Label } from "./ui/label";
 
 const SellRoute = () => {
   const [images, setImages] = React.useState<string[]>([]);
