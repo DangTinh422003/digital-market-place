@@ -1,5 +1,6 @@
 import Image from "next/image";
 import React from "react";
+import { Carousel, CarouselContent, CarouselItem } from "./ui/carousel";
 
 interface ProductCardProps {
   images: string[];
@@ -18,14 +19,22 @@ const ProductCard = ({
 }: ProductCardProps) => {
   return (
     <div className="rounded-lg">
-      <div className="relative h-[230px]">
-        <Image
-          src={images[0]}
-          alt=""
-          fill
-          className="object-cover w-full h-full rounded-lg"
-        />
-      </div>
+      <Carousel>
+        <CarouselContent>
+          {images.map((img, idx) => (
+            <CarouselItem key={idx}>
+              <div className="relative h-[230px]">
+                <Image
+                  src={img}
+                  alt=""
+                  fill
+                  className="object-cover w-full h-full rounded-lg"
+                />
+              </div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+      </Carousel>
 
       <div className="flex justify-between items-start mt-2">
         <h1 className="font-semibold text-xl">{name}</h1>
