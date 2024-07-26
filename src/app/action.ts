@@ -1,5 +1,9 @@
 "use server";
-import { SELL_PRODUCT_FORM_FIELDS, State } from "@/constants";
+import {
+  SELL_PRODUCT_FORM_FIELDS,
+  State,
+  UPDATE_USER_SETTINGS_FORM_FIELDS,
+} from "@/constants";
 import prisma from "@/utils/db";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { CategoryTypes } from "@prisma/client";
@@ -7,7 +11,7 @@ import { z } from "zod";
 
 const productSchema = z.object({
   name: z.string().min(3, {
-    message: "Name must be atleast 3 characters long",
+    message: "Name must be at least 3 characters long",
   }),
   category: z.string().min(1, {
     message: "Category is required",
@@ -16,7 +20,7 @@ const productSchema = z.object({
     message: "Price must be at least 1",
   }),
   smallDescription: z.string().min(10, {
-    message: "Please sumary your product more",
+    message: "Please summary your product more",
   }),
   description: z.string().min(1, {
     message: "Please describe your product",
@@ -29,8 +33,20 @@ const productSchema = z.object({
   }),
 });
 
+const userSettingsSchema = z.object({
+  firstName: z.string().min(3, {
+    message: "First name must be at least 3 characters long",
+  }),
+  lastName: z.string().min(3, {
+    message: "Last name must be at least 3 characters long",
+  }),
+  email: z.string().email({
+    message: "Please provide a valid email",
+  }),
+});
+
 export async function sellProduct(prevState: any, form: FormData) {
-  const { getUser } = await getKindeServerSession();
+  const { getUser } = getKindeServerSession();
   const user = await getUser();
   if (!user || !user.id) {
     return {
@@ -51,7 +67,6 @@ export async function sellProduct(prevState: any, form: FormData) {
     productFiles: form.get(SELL_PRODUCT_FORM_FIELDS.PRODUCT_FILES),
   });
 
-  console.log({ dlkasldas: form.getAll(SELL_PRODUCT_FORM_FIELDS.IMAGES) });
   if (!validateFields.success) {
     return {
       status: "error",
@@ -89,5 +104,52 @@ export async function sellProduct(prevState: any, form: FormData) {
   return {
     status: "success",
     message: "Product created successfully",
+  } as State;
+}
+
+export async function updateUserSettings(prevState: any, formData: FormData) {
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+
+  if (!user) {
+    throw new Error("Something went wrong");
+  }
+
+  const validateFields = userSettingsSchema.safeParse({
+    firstName: formData.get(UPDATE_USER_SETTINGS_FORM_FIELDS.FIRST_NAME),
+    lastName: formData.get(UPDATE_USER_SETTINGS_FORM_FIELDS.LAST_NAME),
+    email: formData.get(UPDATE_USER_SETTINGS_FORM_FIELDS.EMAIL),
+  });
+
+  if (!validateFields.success) {
+    return {
+      status: "error",
+      error: validateFields.error.flatten().fieldErrors,
+      message: "Oops! Something went wrong",
+    } as State;
+  }
+
+  try {
+    const data = await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        firstName: validateFields.data.firstName,
+        lastName: validateFields.data.lastName,
+        email: validateFields.data.email,
+      },
+    });
+  } catch (error) {
+    return {
+      status: "error",
+      message: "Oops! Something went wrong",
+      error,
+    } as State;
+  }
+
+  return {
+    status: "success",
+    message: "User updated successfully",
   } as State;
 }

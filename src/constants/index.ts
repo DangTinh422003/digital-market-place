@@ -15,3 +15,9 @@ export enum SELL_PRODUCT_FORM_FIELDS {
   IMAGES = "images",
   PRODUCT_FILES = "productFiles",
 }
+
+export enum UPDATE_USER_SETTINGS_FORM_FIELDS {
+  FIRST_NAME = "firstName",
+  LAST_NAME = "lastName",
+  EMAIL = "email",
+}

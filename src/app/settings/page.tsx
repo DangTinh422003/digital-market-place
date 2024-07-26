@@ -32,7 +32,11 @@ const SettingsPage = async () => {
   return (
     <div className="max-w-7xl mx-auto px-4 md:px-8">
       <Card>
-        <SettingsForm />
+        <SettingsForm
+          firstName={data?.firstName!}
+          lastName={data?.lastName!}
+          email={data?.email!}
+        />
       </Card>
     </div>
   );
