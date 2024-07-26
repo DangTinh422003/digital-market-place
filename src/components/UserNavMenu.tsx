@@ -11,6 +11,7 @@ import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs";
 import React from "react";
 import { Button } from "./ui/button";
 import { Avatar, AvatarImage } from "./ui/avatar";
+import Link from "next/link";
 
 interface UserProfile {
   name: string;
@@ -41,8 +42,12 @@ const UserNavMenu = ({ avatar, email, name }: UserProfile) => {
           </DropdownMenuLabel>
 
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Profile</DropdownMenuItem>
-          <DropdownMenuItem>Billing</DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link href={"/sell"}>Sell your Products</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link href={"/settings"}>Settings</Link>
+          </DropdownMenuItem>
           <DropdownMenuItem>Team</DropdownMenuItem>
           <DropdownMenuItem>Subscription</DropdownMenuItem>
           <DropdownMenuSeparator />
