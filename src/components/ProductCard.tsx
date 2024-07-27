@@ -1,6 +1,8 @@
 import Image from "next/image";
 import React from "react";
 import { Carousel, CarouselContent, CarouselItem } from "./ui/carousel";
+import { Button } from "./ui/button";
+import Link from "next/link";
 
 interface ProductCardProps {
   images: string[];
@@ -46,6 +48,10 @@ const ProductCard = ({
       <p className="text-gray-600 line-clamp-2 text-sm mt-2">
         {smallDescription}
       </p>
+
+      <Button className="w-full mt-5">
+        <Link href={`/product/${id}`}>Learn More</Link>
+      </Button>
     </div>
   );
 };

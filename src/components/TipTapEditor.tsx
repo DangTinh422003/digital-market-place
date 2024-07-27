@@ -12,6 +12,7 @@ const TipTapEditor = (props: TipTapEditorProps) => {
 
   const editor = useEditor({
     extensions: [StarterKit],
+    content: "json",
     editorProps: {
       attributes: {
         class: "focus:outline-none min-h-[150px] prose prose-sm sm:prose-base",
